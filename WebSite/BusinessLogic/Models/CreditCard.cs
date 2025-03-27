@@ -35,7 +35,7 @@ namespace Core
             try
             {
                 var xElement = document.Descendants("CreditCard").FirstOrDefault(c => c.Element("Username").Value.Equals(Username));
-                if (!xElement.HasElements)
+                if (xElement == null || !xElement.HasElements)
                     throw new NullReferenceException(string.Format("No card found for {0}.", Username));
                 this.Username = Username;
                 this.Expiry = Convert.ToDateTime(xElement.Element("Expiry").Value);
@@ -171,7 +171,7 @@ namespace Core
             try
             {
                 var xElement = document.Descendants("CreditCard").FirstOrDefault(c => c.Element("Username").Value.Equals(Username));
-                if (!xElement.HasElements)
+                if (xElement == null || !xElement.HasElements)
                     throw new NullReferenceException(string.Format("No card found for {0}.", Username));
             }
             catch (NullReferenceException)
@@ -196,6 +196,8 @@ namespace Core
             try
             {
                 var xElement = document.Descendants("CreditCard").FirstOrDefault(c => c.Element("Username").Value.Equals(Username));
+                if (xElement == null)
+                    throw new NullReferenceException(string.Format("Credit card for {0} was not found.", Username));
                 xElement.Element("Expiry").Value = this.Expiry.ToString();
                 xElement.Element("Number").Value = this.Number;
                 WriteCreditCardFile(document);
